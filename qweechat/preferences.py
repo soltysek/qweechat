@@ -35,4 +35,23 @@ class PreferencesDialog(QtGui.QDialog):
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
 
+        sections = {}
+
+        for section in self.config.sections():
+            sections[section] = QtGui.QGroupBox(section)
+            boxGrid = QtGui.QGridLayout()
+
+            for item in self.config.items(section):
+                boxGrid.addWidget(QtGui.QLabel(item[0]))
+
+            sections[section].setLayout(boxGrid)
+            grid.addWidget(sections[section])
+
+        self.dialog_buttons = QtGui.QDialogButtonBox()
+        self.dialog_buttons.setStandardButtons(
+            QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+        self.dialog_buttons.rejected.connect(self.close)
+
+        grid.addWidget(self.dialog_buttons, 4, 0, 1, 2)
+        self.setLayout(grid)
         self.show()
